@@ -8,9 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
 
+@Data
 @Entity
 @Table(name="book")
-public @Data class Book {
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
