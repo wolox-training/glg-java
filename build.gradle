@@ -44,6 +44,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compileOnly('org.projectlombok:lombok:1.18.10')
 	annotationProcessor('org.projectlombok:lombok:1.18.10')
+	implementation 'org.jetbrains:annotations:15.0'
 }
 
 test {
