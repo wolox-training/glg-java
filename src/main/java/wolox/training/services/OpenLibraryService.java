@@ -6,13 +6,19 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import wolox.training.dto.BookDTO;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
+@Service
 public class OpenLibraryService {
+
+    @Value("${openlibrary.base.url}")
+    private String baseUrl;
 
     @Autowired
     private BookRepository bookRepository;
@@ -28,8 +34,7 @@ public class OpenLibraryService {
 
     public Optional<BookDTO> bookInfo(String isbn) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
-        String urlString = "https://openlibrary.org/api/books?bibkeys=";
-        urlString += String.format("ISBN:%s&format=json&jscmd=data", isbn);
+        String urlString = baseUrl + String.format("?bibkeys=ISBN:%s&format=json&jscmd=data", isbn);
         ResponseEntity<String> response = restTemplate.getForEntity(urlString, String.class);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(Objects.requireNonNull(response.getBody()));
