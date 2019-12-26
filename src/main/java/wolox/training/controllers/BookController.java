@@ -23,6 +23,7 @@ public class BookController {
 
     private BookRepository bookRepository;
 
+    @Autowired
     public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
