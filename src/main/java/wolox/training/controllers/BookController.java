@@ -76,7 +76,8 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Book> search(@RequestParam(name = "isbn", required = false) String isbn) throws IOException {
+    public ResponseEntity<Book> search(@RequestParam(name = "isbn", required = false) String isbn)
+        throws IOException {
         Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
         if (optionalBook.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(optionalBook.get());
