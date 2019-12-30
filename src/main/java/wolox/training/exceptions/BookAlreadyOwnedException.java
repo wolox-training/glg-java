@@ -1,6 +1,7 @@
 package wolox.training.exceptions;
 
-public class BookAlreadyOwnedException extends Exception{
+public class BookAlreadyOwnedException extends Exception {
+
     public BookAlreadyOwnedException() {
         super();
     }
