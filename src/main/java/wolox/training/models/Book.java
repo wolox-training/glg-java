@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@ApiModel(description = "Books from the OpenLibraryApi")
 @Table(name = "book")
 public class Book {
 
@@ -19,6 +22,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ApiModelProperty(notes = "The book genre: could be horror, comedy, drama, etc.")
     @Column
     private String genre;
 
