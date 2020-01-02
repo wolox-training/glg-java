@@ -20,7 +20,7 @@ import wolox.training.models.User;
 import wolox.training.repositories.UserRepository;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private UserRepository userRepository;

@@ -27,7 +27,7 @@ import wolox.training.repositories.BookRepository;
 import wolox.training.services.OpenLibraryService;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/api/books")
 public class BookController {
 
     private BookRepository bookRepository;
