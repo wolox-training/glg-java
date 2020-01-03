@@ -28,13 +28,13 @@ public class BookController {
 
     private BookRepository bookRepository;
 
-    @Autowired
-    public BookController(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    private OpenLibraryService openLibraryService;
 
     @Autowired
-    private OpenLibraryService openLibraryService;
+    public BookController(BookRepository bookRepository, OpenLibraryService openLibraryService) {
+        this.bookRepository = bookRepository;
+        this.openLibraryService = openLibraryService;
+    }
 
     @GetMapping("/greeting")
     public String greeting(
@@ -51,13 +51,12 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book findOne(@PathVariable Long id) throws IOException, BookNotFoundException {
+    public Book findOne(@PathVariable Long id) {
         return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 
     @PutMapping("/{id}")
-    public Book updateBook(@RequestBody Book book, @PathVariable Long id)
-        throws BookNotFoundException, BookIdDontMatchException {
+    public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
         if (book.getId() != id) {
             throw new BookIdDontMatchException();
         }
@@ -66,14 +65,14 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) throws BookNotFoundException {
+    public void delete(@PathVariable Long id) {
         bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         bookRepository.deleteById(id);
     }
 
     @GetMapping("/search")
     public ResponseEntity<Book> search(@RequestParam(name = "isbn", required = false) String isbn)
-        throws IOException, BookNotFoundException {
+        throws IOException {
         Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
         if (optionalBook.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(optionalBook.get());

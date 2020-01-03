@@ -1,10 +1,9 @@
 package wolox.training.dto;
 
-import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class BookDTO implements Serializable {
+public class BookDTO {
 
     private String isbn;
     private String title;

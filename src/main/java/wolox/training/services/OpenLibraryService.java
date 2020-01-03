@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +21,38 @@ public class OpenLibraryService {
     @Value("${openlibrary.base.url}")
     private String baseUrl;
 
-    @Autowired
+    private ObjectMapper mapper;
+
+    @PostConstruct
+    private void mapper() {
+        mapper = new ObjectMapper();
+    }
+
     private BookRepository bookRepository;
+
+    private RestTemplate restTemplate;
+
+    @PostConstruct
+    private void restTemplate() {
+        restTemplate = new RestTemplate();
+    }
+
+    @Autowired
+    public OpenLibraryService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     public Optional<Book> findByIsbn(String isbn) throws IOException {
         Optional<BookDTO> optionalBookDTO = bookInfo(isbn);
-        return optionalBookDTO.map((bookDTO) -> {
+        return optionalBookDTO.map(bookDTO -> {
             Book book = convertDtoToEntity(bookDTO);
-            bookRepository.save(book);
-            return book;
+            return bookRepository.save(book);
         });
     }
 
     public Optional<BookDTO> bookInfo(String isbn) throws IOException {
-        RestTemplate restTemplate = new RestTemplate();
         String urlString = baseUrl + String.format("?bibkeys=ISBN:%s&format=json&jscmd=data", isbn);
         ResponseEntity<String> response = restTemplate.getForEntity(urlString, String.class);
-        ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(Objects.requireNonNull(response.getBody()));
         if (root.size() > 0) {
             return Optional.of(buildDto(isbn, root));
