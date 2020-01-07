@@ -40,14 +40,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User findOne(@PathVariable Long id)
-        throws UserNotFoundException {
+    public User findOne(@PathVariable Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable Long id)
-        throws UserIdDontMatchException, UserNotFoundException {
+    public User updateUser(@RequestBody User user, @PathVariable Long id) {
         if (user.getId() != id) {
             throw new UserIdDontMatchException();
         }
@@ -56,23 +54,21 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) throws UserNotFoundException {
+    public void delete(@PathVariable Long id) {
         userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         userRepository.deleteById(id);
     }
 
     @PutMapping("/{id}/books")
     @ResponseStatus(HttpStatus.CREATED)
-    public User addBook(@PathVariable Long id, @RequestBody Book book)
-        throws UserNotFoundException {
+    public User addBook(@PathVariable Long id, @RequestBody Book book) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.addBook(book);
         return userRepository.save(user);
     }
 
     @DeleteMapping("/{id}/books")
-    public User deleteBook(@PathVariable Long id, @RequestBody Book book)
-        throws UserNotFoundException {
+    public User deleteBook(@PathVariable Long id, @RequestBody Book book) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.removeBook(book);
         return userRepository.save(user);

@@ -82,7 +82,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void whenFindABook() throws Exception {
+    public void whenFindABookByIdThenReturnTheBook() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
         mvc.perform(get("/api/books/1").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -90,14 +90,14 @@ public class BookControllerTest {
     }
 
     @Test
-    public void whenFindABookThatNotExists() throws Exception {
+    public void whenFindABookThatNotExistsThenReturnNotFound() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
         mvc.perform(get("/api/books/2").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenUpdateABook() throws Exception {
+    public void whenUpdateABookThenIsUpdated() throws Exception {
         bookTest.setTitle("Another title");
         bookTest.setId(1L);
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
@@ -107,7 +107,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void whenDeleteABook() throws Exception {
+    public void whenDeleteABookThenTheBookIsDeleted() throws Exception {
         bookTest.setId(1L);
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
         mvc.perform(delete("/api/books/1").contentType(MediaType.APPLICATION_JSON))
@@ -115,7 +115,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void whenFindABookByYear() throws Exception {
+    public void whenFindABookByYearThenReturnAListWithTheBook() throws Exception {
         books.add(book1994);
         Mockito.when(mockBookRepository.findByYearAllIgnoreCase("1994")).thenReturn(books);
         mvc.perform(get("/api/books/?yearh=1994").contentType(MediaType.APPLICATION_JSON))
@@ -123,7 +123,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void whenFindABookByIsbn() throws Exception {
+    public void whenFindABookByIsbnThenReturnTheBook() throws Exception {
         Mockito.when(mockBookRepository.findByIsbn("ABCD1234")).thenReturn(ofNullable(bookTest));
         mvc.perform(get("/api/books/?yearh=1994").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
