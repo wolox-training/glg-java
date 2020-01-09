@@ -44,7 +44,10 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compileOnly('org.projectlombok:lombok:1.18.10')
 	annotationProcessor('org.projectlombok:lombok:1.18.10')
-	implementation 'org.jetbrains:annotations:15.0'
+	implementation('org.jetbrains:annotations:15.0')
+	compile("io.springfox:springfox-swagger2:2.9.2")
+	compile("io.springfox:springfox-swagger-ui:2.9.2")
+	compile("org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE")
 }
 
 test {

@@ -1,5 +1,9 @@
 package wolox.training.controllers;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.io.IOException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +55,16 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book findOne(@PathVariable Long id) {
+    @ApiOperation(value = "Giving an id, return the book", response = Book.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Succesfully retrived book"),
+        @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+        @ApiResponse(code = 403, message = "Accessing th resource you were trying to reach is forbidden"),
+        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
+    public Book findOne(
+        @ApiParam(value = "id to find the book", required = true) @PathVariable Long id)
+        throws BookNotFoundException {
         return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 
