@@ -110,6 +110,13 @@ public class UserControllerTest {
     }
 
     @Test
+    public void whenDeleteAUserDontExistsThenReturnNotFound() throws Exception {
+        Mockito.when(mockUserRepository.findById(1L)).thenReturn(ofNullable(userTest));
+        mvc.perform(delete("/api/users/2").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void whenAddABookToUsersThenIsPersistedInTheUserList() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
         Mockito.when(mockUserRepository.findById(1L)).thenReturn(ofNullable(userTest));
@@ -117,6 +124,16 @@ public class UserControllerTest {
             .content(objectMapper.writeValueAsString(bookTest)))
             .andExpect(status().isCreated());
     }
+
+    @Test
+    public void whenAddABookToAUsersThatNotExistsThenReturnNotFound() throws Exception {
+        Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
+        Mockito.when(mockUserRepository.findById(1L)).thenReturn(ofNullable(userTest));
+        mvc.perform(put("/api/users/2/books").contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(bookTest)))
+            .andExpect(status().isNotFound());
+    }
+
 
     @Test
     public void whenDeleteABookThenIsPersistedInTheUserList() throws Exception {

@@ -2,7 +2,8 @@ package wolox.training.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
+import com.github.javafaker.Faker;
+import java.time.ZoneId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,10 +30,12 @@ public class UserTest {
 
     @Before
     public void setUp() {
+        Faker faker = new Faker();
         user = new User();
-        user.setUsername("Username");
-        user.setName("Name");
-        user.setBirthdate(LocalDate.parse("1990-01-01"));
+        user.setUsername(faker.internet().emailAddress());
+        user.setName(faker.name().fullName());
+        user.setBirthdate(
+            faker.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         userRepository.save(user);
     }
 

@@ -2,6 +2,7 @@ package wolox.training.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.github.javafaker.Faker;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,15 +29,16 @@ public class BookTest {
 
     @Before
     public void setUp() {
+        Faker faker = new Faker();
         book = new Book();
-        book.setAuthor("Author");
-        book.setImage("image.png");
-        book.setTitle("A title");
-        book.setSubtitle("A subtitle");
-        book.setPublisher("Publisher");
-        book.setYear("1990");
-        book.setPages(100);
-        book.setIsbn("ABCD1234");
+        book.setAuthor(faker.book().author());
+        book.setImage(faker.internet().image());
+        book.setTitle(faker.book().title());
+        book.setSubtitle(faker.book().title());
+        book.setPublisher(faker.book().publisher());
+        book.setYear(String.valueOf(faker.number().numberBetween(1900, 2020)));
+        book.setPages(Integer.parseInt(faker.number().digits(3)));
+        book.setIsbn(faker.code().isbn10());
         bookRepository.save(book);
     }
 

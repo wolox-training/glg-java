@@ -34,7 +34,7 @@ public class BookControllerTest {
     private MockMvc mvc;
 
     private Book bookTest;
-    private Book book1994;
+    private Book bookWiyhYear1994;
     private List<Book> books;
 
     @MockBean
@@ -61,15 +61,15 @@ public class BookControllerTest {
         bookTest.setYear("1990");
         bookTest.setPages(100);
         bookTest.setIsbn("ABCD1234");
-        book1994 = new Book();
-        book1994.setAuthor("Author");
-        book1994.setImage("image.png");
-        book1994.setTitle("A title");
-        book1994.setSubtitle("A subtitle");
-        book1994.setPublisher("Publisher");
-        book1994.setYear("1994");
-        book1994.setPages(100);
-        book1994.setIsbn("ABCD1235");
+        bookWiyhYear1994 = new Book();
+        bookWiyhYear1994.setAuthor("Author");
+        bookWiyhYear1994.setImage("image.png");
+        bookWiyhYear1994.setTitle("A title");
+        bookWiyhYear1994.setSubtitle("A subtitle");
+        bookWiyhYear1994.setPublisher("Publisher");
+        bookWiyhYear1994.setYear("1994");
+        bookWiyhYear1994.setPages(100);
+        bookWiyhYear1994.setIsbn("ABCD1235");
         books = new ArrayList<Book>();
 
     }
@@ -79,6 +79,13 @@ public class BookControllerTest {
         mvc.perform(post("/api/books/").contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(bookTest)))
             .andExpect(status().isCreated());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void whenCreateABookWithoutIsbnThenBookIsNotPersisted() throws Exception {
+        bookTest.setIsbn(null);
+        mvc.perform(post("/api/books/").contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(bookTest)));
     }
 
     @Test
@@ -116,16 +123,16 @@ public class BookControllerTest {
 
     @Test
     public void whenFindABookByYearThenReturnAListWithTheBook() throws Exception {
-        books.add(book1994);
+        books.add(bookWiyhYear1994);
         Mockito.when(mockBookRepository.findByYearAllIgnoreCase("1994")).thenReturn(books);
-        mvc.perform(get("/api/books/?yearh=1994").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/books/?year=1994").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
 
     @Test
     public void whenFindABookByIsbnThenReturnTheBook() throws Exception {
         Mockito.when(mockBookRepository.findByIsbn("ABCD1234")).thenReturn(ofNullable(bookTest));
-        mvc.perform(get("/api/books/?yearh=1994").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/books/?isbn=ABCD1234").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
 }
