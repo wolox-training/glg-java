@@ -34,7 +34,7 @@ public class UserTest {
         user = new User();
         user.setUsername(faker.internet().emailAddress());
         user.setName(faker.name().fullName());
-        user.setBirthdate(
+        user.setBirthday(
             faker.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         userRepository.save(user);
     }
