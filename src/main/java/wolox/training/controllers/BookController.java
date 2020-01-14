@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -89,9 +86,8 @@ public class BookController {
 
     @GetMapping
     public List<Book> findByYear(@RequestParam(required = false) String year) {
-        return bookRepository.findByYear(year);
+        return bookRepository.findByYearAllIgnoreCase(year);
     }
-
 
     @GetMapping("/search")
     public ResponseEntity<Book> search(@RequestParam(name = "isbn", required = false) String isbn)

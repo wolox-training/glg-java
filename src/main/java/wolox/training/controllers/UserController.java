@@ -34,6 +34,11 @@ public class UserController {
         return userRepository.save(user);
     }
 
+    @GetMapping
+    public Iterable<User> findAll() {
+        return userRepository.findAll();
+    }
+
     @GetMapping("/{id}")
     public User findOne(@PathVariable Long id)
         throws UserNotFoundException {
@@ -58,19 +63,18 @@ public class UserController {
 
     @PutMapping("/{id}/books")
     @ResponseStatus(HttpStatus.CREATED)
-    public Book addBook(@PathVariable Long id, @RequestBody Book book)
+    public User addBook(@PathVariable Long id, @RequestBody Book book)
         throws UserNotFoundException {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.addBook(book);
-        userRepository.save(user);
-        return book;
+        return userRepository.save(user);
     }
 
     @DeleteMapping("/{id}/books")
-    public void deleteBook(@PathVariable Long id, @RequestBody Book book)
+    public User deleteBook(@PathVariable Long id, @RequestBody Book book)
         throws UserNotFoundException {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.removeBook(book);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }
