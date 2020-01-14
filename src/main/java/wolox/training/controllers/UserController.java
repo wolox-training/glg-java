@@ -73,4 +73,15 @@ public class UserController {
         user.removeBook(book);
         return userRepository.save(user);
     }
+
+    @PutMapping("/{id}/password")
+    public User updatePassword(@PathVariable Long id, @RequestBody User user) {
+        if (user.getId() != id) {
+            throw new UserIdDontMatchException();
+        }
+        User userToPersist = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        userToPersist.setPassword(user.getPassword());
+
+        return userRepository.save(userToPersist);
+    }
 }

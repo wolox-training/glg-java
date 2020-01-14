@@ -17,9 +17,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.models.Book;
@@ -28,6 +31,8 @@ import wolox.training.services.OpenLibraryService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BookController.class)
+@ContextConfiguration(classes = {BookController.class})
+@AutoConfigureMockMvc(addFilters = false)
 public class BookControllerTest {
 
     @Autowired
@@ -88,6 +93,7 @@ public class BookControllerTest {
             .content(objectMapper.writeValueAsString(bookTest)));
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenFindABookByIdThenReturnTheBook() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
@@ -96,6 +102,7 @@ public class BookControllerTest {
             .andExpect(content().string(objectMapper.writeValueAsString(bookTest)));
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenFindABookThatNotExistsThenReturnNotFound() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
@@ -103,6 +110,7 @@ public class BookControllerTest {
             .andExpect(status().isNotFound());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenUpdateABookThenIsUpdated() throws Exception {
         bookTest.setTitle("Another title");
@@ -113,6 +121,7 @@ public class BookControllerTest {
             .andExpect(status().isOk());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenDeleteABookThenTheBookIsDeleted() throws Exception {
         bookTest.setId(1L);
@@ -121,6 +130,7 @@ public class BookControllerTest {
             .andExpect(status().isOk());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenFindABookByYearThenReturnAListWithTheBook() throws Exception {
         books.add(bookWiyhYear1994);
@@ -129,6 +139,7 @@ public class BookControllerTest {
             .andExpect(status().isOk());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenFindABookByIsbnThenReturnTheBook() throws Exception {
         Mockito.when(mockBookRepository.findByIsbn("ABCD1234")).thenReturn(ofNullable(bookTest));

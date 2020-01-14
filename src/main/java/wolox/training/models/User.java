@@ -27,6 +27,9 @@ public class User {
     @Column(nullable = false)
     private String username;
 
+    @Column
+    private String password;
+
     @Column(nullable = false)
     private String name;
 
@@ -44,7 +47,7 @@ public class User {
         return (List<Book>) Collections.unmodifiableList(books);
     }
 
-    public void addBook(Book book) throws BookAlreadyOwnedException {
+    public void addBook(Book book) {
         if (books.contains(book)) {
             throw new BookAlreadyOwnedException();
         }

@@ -17,9 +17,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.models.Book;
@@ -29,6 +32,8 @@ import wolox.training.repositories.UserRepository;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
+@ContextConfiguration(classes = {UserController.class})
+@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTest {
 
     @Autowired
@@ -75,6 +80,7 @@ public class UserControllerTest {
             .andExpect(status().isCreated());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenGetAllUsersThenReturnAListOfUsers() throws Exception {
         users.add(userTest);
@@ -84,6 +90,7 @@ public class UserControllerTest {
             .andExpect(content().string(objectMapper.writeValueAsString(users)));
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenFindAUserByIdThenReturnTheUser() throws Exception {
         Mockito.when(mockUserRepository.findById(1L)).thenReturn(ofNullable(userTest));
@@ -92,6 +99,7 @@ public class UserControllerTest {
             .andExpect(content().string(objectMapper.writeValueAsString(userTest)));
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenUpdateAUserThenTheUserIsUpdated() throws Exception {
         userTest.setName("Other name");
@@ -102,6 +110,7 @@ public class UserControllerTest {
             .andExpect(status().isOk());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenDeleteAUserThenTheUserIsDeleted() throws Exception {
         Mockito.when(mockUserRepository.findById(1L)).thenReturn(ofNullable(userTest));
@@ -109,6 +118,7 @@ public class UserControllerTest {
             .andExpect(status().isOk());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenDeleteAUserDontExistsThenReturnNotFound() throws Exception {
         Mockito.when(mockUserRepository.findById(1L)).thenReturn(ofNullable(userTest));
@@ -116,6 +126,7 @@ public class UserControllerTest {
             .andExpect(status().isNotFound());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenAddABookToUsersThenIsPersistedInTheUserList() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
@@ -125,6 +136,7 @@ public class UserControllerTest {
             .andExpect(status().isCreated());
     }
 
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenAddABookToAUsersThatNotExistsThenReturnNotFound() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
@@ -134,7 +146,7 @@ public class UserControllerTest {
             .andExpect(status().isNotFound());
     }
 
-
+    @WithMockUser(username = "user", password = "password")
     @Test
     public void whenDeleteABookThenIsPersistedInTheUserList() throws Exception {
         Mockito.when(mockBookRepository.findById(1L)).thenReturn(ofNullable(bookTest));
